@@ -157,6 +157,17 @@ class QBase:
         """Negate the sense of the root connector."""
         self.negated = not self.negated
 
+    @classmethod
+    def from_django_q(cls, q):
+        _children = []
+        for child in q.children:
+            if hasattr(child, '__getitem__'):
+                _children.append(child)
+            else:
+                _children.append(QBase(QBase.from_django_q(child), child.connector, child.negated))
+
+        return _children
+
 
 class Q(QBase):
     """
@@ -179,7 +190,7 @@ class Q(QBase):
         )
 
     def _combine(self, other, conn):
-        if not isinstance(other, Q):
+        if not isinstance(other, Q) and not isinstance(other, QBase):
             raise TypeError(other)
 
         # If the other Q() is empty, ignore it and just use `self`.
