@@ -890,7 +890,7 @@ class NodeSet(BaseSet):
         """
         if args or kwargs:
             q = Q(*args, **kwargs)
-            q = QBase.from_django_q(q)[0]
+            q = QBase.from_django_q(q)
             self.q_filters = Q(self.q_filters & q)
         return self
 

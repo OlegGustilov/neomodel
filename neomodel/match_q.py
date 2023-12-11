@@ -159,14 +159,17 @@ class QBase:
 
     @classmethod
     def from_django_q(cls, q):
-        _children = []
-        for child in q.children:
-            if hasattr(child, '__getitem__'):
-                _children.append(child)
-            else:
-                _children.append(QBase(QBase.from_django_q(child), child.connector, child.negated))
+        def _convert(query):
+            _children = []
+            for child in query.children:
+                if hasattr(child, '__getitem__'):
+                    _children.append(child)
+                else:
+                    _children.append(QBase(_convert(child), child.connector, child.negated))
+            return _children
 
-        return _children
+        q = Q(q, _connector=q.connector, _negated=q.negated)
+        return _convert(q)[0]
 
 
 class Q(QBase):
