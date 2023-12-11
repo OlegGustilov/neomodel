@@ -889,7 +889,7 @@ class NodeSet(BaseSet):
         :return: self
         """
         if args or kwargs:
-            q = Q(*args, *kwargs)
+            q = Q(*args, **kwargs)
             q = QBase.from_django_q(q)[0]
             self.q_filters = Q(self.q_filters & q)
         return self
