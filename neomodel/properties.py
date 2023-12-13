@@ -278,6 +278,21 @@ class EmailProperty(RegexProperty):
     expression = r"[^@]+@[^@]+\.[^@]+"
 
 
+class FileProperty(Property):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.form_field_class = 'FileField'
+
+    @validator
+    def inflate(self, value):
+        return value
+
+    @validator
+    def deflate(self, value):
+        return value
+    
+
 class StringProperty(NormalizedProperty):
     """
     Stores a unicode string

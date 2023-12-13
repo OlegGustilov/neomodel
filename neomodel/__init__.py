@@ -23,6 +23,7 @@ from .properties import (
     DateTimeFormatProperty,
     DateTimeProperty,
     EmailProperty,
+    FileProperty,
     FloatProperty,
     IntegerProperty,
     JSONProperty,
